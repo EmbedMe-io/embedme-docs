@@ -14,13 +14,13 @@ jobs:
       - uses: jaxxstorm/action-install-gh-release@v1.13.0
         with:
           repo: cloudcannon/pagefind
+      - uses: actions/checkout@v4
       - name: Set up Python 3.13
         uses: actions/setup-python@v4
         with:
           python-version: 3.13
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements_test.txt
-      - uses: actions/checkout@v4
       - name: html
         run: make html api
       - uses: FirebaseExtended/action-hosting-deploy@v0
