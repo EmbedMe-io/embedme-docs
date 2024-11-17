@@ -1,10 +1,10 @@
-.. title:: ESPHome
+.. title:: EmbedMe
 
 .. meta::
     :google-site-verification: Q5q5TFbCofxA8-cSa1Frv5Hj4RopF5zwEZf_zaNHqf4
 
 .. seo::
-    :description: ESPHome Homepage - Reimagining DIY Home Automation. ESPHome is a framework that
+    :description: EmbedMe Homepage - Reimagining DIY Home Automation. EmbedMe is a framework that
       tries to provide the best possible use experience for using IoT microcontrollers
       for Home Automation. Just write a simple YAML configuration file and get your own customized firmware.
     :image: logo.svg
@@ -12,7 +12,9 @@
 .. image:: /images/logo-text.svg
     :class: logo
 
-ESPHome is a system to control your microcontrollers by simple yet powerful configuration files and control them remotely through Home Automation systems.
+EmbedMe is a build system for programming microcontrollers, in particular the ESP32 series, Raspberry Pi Pico (RP204) and some Tuya microcontrollers. No programming knowledge is required to configure a microcontroller with pre-defined, interconnected components targeting a range of hardware.
+
+EmbedMe is a fork of the open source `ESPHome project <https://esphome.io>`_.
 
 .. image:: /images/hero.png
 
@@ -77,12 +79,12 @@ ESPHome is a system to control your microcontrollers by simple yet powerful conf
                 </li>
                 <li>
                     <a class="reference" href="/guides/creators.html">
-                        Sharing ESPHome devices
+                        Sharing EmbedMe devices
                     </a>
                 </li>
                 <li>
                     <a class="reference" href="/guides/made_for_esphome.html">
-                        Made for ESPHome program
+                        Made for EmbedMe program
                     </a>
                 </li>
             </ul>
@@ -143,12 +145,12 @@ Peripherals which directly support the operation of the microcontroller's proces
     PSRAM, components/psram, psram.svg
     Deep Sleep, components/deep_sleep, hotel.svg, dark-invert
 
-ESPHome Automations
+EmbedMe Automations
 -------------------
 
 *"When this happens, I want it to do that..."*
 
-Automations are how we customize ESPHome devices to respond/behave exactly how you want them to.
+Automations are how we customize EmbedMe devices to respond/behave exactly how you want them to.
 
 .. imgtable::
 
@@ -156,10 +158,10 @@ Automations are how we customize ESPHome devices to respond/behave exactly how y
     "Actions, Triggers, Conditions", automations/actions, description.svg, dark-invert
     Templates, automations/templates, description.svg, dark-invert
 
-ESPHome Components
+EmbedMe Components
 ------------------
 
-ESPHome-specific components or components supporting ESPHome device provisioning post-installation.
+EmbedMe-specific components or components supporting EmbedMe device provisioning post-installation.
 
 .. imgtable::
 
@@ -175,10 +177,10 @@ ESPHome-specific components or components supporting ESPHome device provisioning
     JSON, components/json, json.svg, dark-invert
     Script, components/script, description.svg, dark-invert
 
-ESPHome Configuration
+EmbedMe Configuration
 ---------------------
 
-Streamline your ESPHome configuration and/or use components provided by other contributors.
+Streamline your EmbedMe configuration and/or use components provided by other contributors.
 
 .. imgtable::
 
@@ -1182,8 +1184,6 @@ Cookbook
 
 Do you have other awesome automations or cool setups? Please feel free to add them to the
 documentation for others to copy. See :doc:`Contributing </guides/contributing>`.
-
-If you'd like to share configurations for specific devices, please contribute to our `ESPHome Devices <https://devices.esphome.io/>`__ database.
 
 .. toctree::
     :hidden:
