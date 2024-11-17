@@ -22,7 +22,12 @@ jobs:
           python-version: 3.13
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements_test.txt
-      - run: make html api
+      - name: Install doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install doxygen
+      - name: html
+        run: make html api
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
