@@ -1,5 +1,6 @@
 name: CI
 
+# Runs build, lint, ruff, and Python tests on every PR against main.
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
