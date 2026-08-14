@@ -1,0 +1,35 @@
+# Caching headers for Cloudflare Pages, translated from upstream esphome.io's
+# netlify.toml [[headers]] blocks. Cloudflare Pages reads this flat-file format
+# natively. s-maxage governs Cloudflare's own edge cache (equivalent role to
+# Netlify's separate Cloudflare-CDN-Cache-Control header, which only made
+# sense for Netlify's Cloudflare-as-CDN-in-front-of-Netlify setup -- not
+# needed here since Cloudflare Pages is itself the edge/CDN).
+
+# Default caching for all pages (HTML and everything else)
+# Browser: 1 hour, Cloudflare edge: 1 week, serve stale while revalidating
+/*
+  Cache-Control: public, max-age=3600, s-maxage=604800, stale-while-revalidate=86400
+  Link: </sitemap-index.xml>; rel="index"; type="application/xml", </components.json>; rel="describedby"; type="application/json"
+
+# Fingerprinted assets (Astro build output in /_astro/) - 1 year, immutable
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static images - browser: 1 week, edge: 1 month
+/images/*
+  Cache-Control: public, max-age=604800, s-maxage=2592000, stale-while-revalidate=604800
+
+# Project images
+/projects/*
+  Cache-Control: public, max-age=604800, s-maxage=2592000, stale-while-revalidate=604800
+
+# Favicons - browser: 1 week, edge: 1 month
+/favicon*
+  Cache-Control: public, max-age=604800, s-maxage=2592000
+
+# Sitemap and robots.txt - browser: 1 hour, edge: 1 day
+/sitemap*
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
+/robots.txt
+  Cache-Control: public, max-age=3600, s-maxage=86400
