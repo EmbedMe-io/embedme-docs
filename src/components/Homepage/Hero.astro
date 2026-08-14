@@ -1,6 +1,5 @@
 ---
 import { LinkButton } from "@astrojs/starlight/components";
-import LivestreamCard from "@components/Homepage/LivestreamCard.astro";
 
 const marqueeItems = [
   { title: "No complex coding", text: "Simple configuration files do the work for you" },
@@ -13,19 +12,7 @@ const marqueeItems = [
 <section class="hero">
   <div class="announcement-container">
     <div class="announcement-banner card card-bgc">
-      <p>
-        Introducing the ESPHome Starter Kit! The easiest path to building your own smart home devices – no soldering,
-        breadboarding, or coding required.
-      </p>
-      <LinkButton href="/starter-kit/" class="card__text-link" icon="right-arrow" iconPlacement="start"
-        >Get your Starter Kit today</LinkButton
-      >
-      <LinkButton
-        href="/blog/2026/08/12/the-esphome-starter-kit-is-here/"
-        class="card__text-link"
-        icon="right-arrow"
-        iconPlacement="start">Read blog post</LinkButton
-      >
+      <p>EmbedMe is a fork of the open source ESPHome project, focused on applications beyond Home Assistant.</p>
     </div>
   </div>
   <div class="container">
@@ -33,7 +20,7 @@ const marqueeItems = [
       <h1>Custom smart home devices, built by you</h1>
       <p>
         When you can’t find the smart home device you need in a store, build it yourself! Turn inexpensive components
-        into sensors, switches, displays, and more – just tell ESPHome what to do and it handles the rest, with no need
+        into sensors, switches, displays, and more – just tell EmbedMe what to do and it handles the rest, with no need
         to code unless you want to.
       </p>
       <LinkButton href="#begin-here">Begin here</LinkButton>
@@ -47,11 +34,9 @@ const marqueeItems = [
           >Browse components</LinkButton
         >
         <LinkButton href="https://devices.esphome.io/" class="card__text-link" icon="right-arrow" iconPlacement="start"
-          >Device list</LinkButton
+          >Upstream device list</LinkButton
         >
       </div>
-
-      <LivestreamCard slug="esphome" class="hero-livestream" />
     </div>
   </div>
   <div class="marquee">
@@ -202,15 +187,6 @@ const marqueeItems = [
       @include bp(desktop) {
         flex-direction: column;
         align-items: flex-end;
-      }
-
-      :global(.hero-livestream) {
-        width: 100%;
-
-        @include bp(desktop) {
-          width: 360px;
-          max-width: 100%;
-        }
       }
 
       .card {

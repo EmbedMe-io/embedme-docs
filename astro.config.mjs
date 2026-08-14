@@ -120,7 +120,7 @@ function getComponentItems() {
 }
 
 export default defineConfig({
-  site: "https://esphome.io",
+  site: "https://docs.embedme.io",
   vite: {
     resolve: {
       alias: {
@@ -128,23 +128,14 @@ export default defineConfig({
         "@assets": path.resolve(__dirname, "./src/assets"),
       },
     },
-    // Same-origin proxy for the Open Home Foundation livestream API so the
-    // browser isn't blocked by CORS during local dev. Production uses the
-    // matching Netlify rewrite in netlify.toml.
-    server: {
-      proxy: {
-        "/livestream-api": {
-          target: "https://web-api.openhomefoundation.org/livestream",
-          changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/livestream-api/, ""),
-        },
-      },
-    },
   },
   image: {
     breakpoints: imageBreakpoints,
     responsiveStyles: true,
-    domains: ["assets.openhomefoundation.org", "www.openhomefoundation.org"],
+    // starlight-blog generates social-card opengraph screenshots via the Open
+    // Home Foundation's screenshot proxy -- unrelated to the (removed)
+    // livestream feature, still required for blog post/author pages to build.
+    domains: ["assets.openhomefoundation.org"],
   },
   markdown: {
     // Astro 7 defaults `markdown.processor` to Sätteri, which does not run remark/rehype plugins.
@@ -158,7 +149,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: "ESPHome - Smart Home Made Simple",
+      title: "EmbedMe - Smart Home Made Simple",
       titleDelimiter: "-",
       favicon: "/favicon.ico",
       pagination: false,
@@ -177,18 +168,16 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/esphome/esphome",
+          href: "https://github.com/EmbedMe-io/embedme",
         },
         {
           icon: "discord",
           label: "Discord",
-          href: "https://esphome.io/chat",
+          href: "https://discord.gg/BCHEtD4A",
         },
       ],
       editLink: {
-        baseUrl: `https://github.com/esphome/esphome.io/edit/${
-          ["next", "beta"].includes(process.env.BRANCH) ? "next" : "current"
-        }/`,
+        baseUrl: "https://github.com/EmbedMe-io/embedme-docs/edit/main/",
       },
       routeMiddleware: ["./src/routeData.ts"],
       components: {
@@ -203,7 +192,7 @@ export default defineConfig({
         {
           label: "Getting Started",
           items: [
-            { label: "Install ESPHome", link: "/install/" },
+            { label: "Install EmbedMe", link: "/install/" },
             { label: "Getting Started", link: "/install/getting-started/" },
             { label: "Running in Docker", link: "/install/docker/" },
             { label: "Ready-Made Projects", link: "/projects/" },
@@ -213,11 +202,6 @@ export default defineConfig({
             },
             { label: "FAQ and Tips", link: "/guides/faq/" },
           ],
-        },
-        {
-          label: "ESPHome Starter Kit",
-          link: "/starter-kit/",
-          attrs: { class: "starter-kit-mobile-link" },
         },
         { label: "Components", link: "/components/" },
         {
@@ -245,7 +229,7 @@ export default defineConfig({
           items: [
             { label: "Blog", link: "/blog/" },
             { label: "Changelog", link: "/changelog/" },
-            { label: "Discord", link: "https://esphome.io/chat" },
+            { label: "Discord", link: "https://discord.gg/BCHEtD4A" },
             {
               label: "Forums",
               link: "https://community.home-assistant.io/c/esphome/",
@@ -400,14 +384,14 @@ export default defineConfig({
           tag: "meta",
           attrs: {
             property: "og:image",
-            content: "https://esphome.io/images/og.webp",
+            content: "https://docs.embedme.io/images/og.webp",
           },
         },
         {
           tag: "meta",
           attrs: {
             name: "twitter:image",
-            content: "https://esphome.io/images/og.webp",
+            content: "https://docs.embedme.io/images/og.webp",
           },
         },
         {

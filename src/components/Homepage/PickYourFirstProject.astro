@@ -5,7 +5,6 @@ import { Swiper, SwiperWrapper, SwiperSlide, SwiperPagination } from "astro-swip
 
 import environmentSensorImg from "../../assets/images/homepage/environment-sensor.webp";
 import timeAndTempSensorImg from "../../assets/images/homepage/time-and-temperature-sensor.webp";
-import kitImg from "../starter-kit/images/esphome-starter-kit.webp";
 
 const swiperOptions = {
   slidesPerView: 1.25,
@@ -37,24 +36,6 @@ const swiperOptions = {
 
     <Swiper class="cards" options={swiperOptions}>
       <SwiperWrapper>
-        <SwiperSlide>
-          <a href="/starter-kit/" class="card card-bgc">
-            <div class="card__media">
-              <Image src={kitImg} alt="ESPHome Starter Kit" width={330} height={230} />
-            </div>
-            <div class="card__body">
-              <span class="card__tag beginner">Beginner</span>
-              <h3 class="card__title">ESPHome Starter Kit</h3>
-              <p>
-                Get started with the ESPHome Starter Kit – the easiest path to building your own smart home devices.
-              </p>
-              <span class="sl-link-button not-content primary card__text-link">
-                <Icon name="right-arrow" size="1.5rem" />
-                View ESPHome Starter Kit
-              </span>
-            </div>
-          </a>
-        </SwiperSlide>
         <SwiperSlide>
           <a href="/cookbook/bme280_environment/" class="card card-bgc">
             <div class="card__media">

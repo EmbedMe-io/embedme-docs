@@ -1,15 +1,13 @@
 {
-  "name": "esphome.io",
+  "name": "embedme-docs",
   "version": "2.0.0",
-  "description": "ESPHome Documentation",
+  "description": "EmbedMe Documentation",
   "type": "module",
   "engines": {
     "node": "^22.22.1 || >=24"
   },
   "scripts": {
-    "predev": "node script/fetch_allowed_referrers.mjs",
     "dev": "astro dev --host",
-    "prebuild": "node script/fetch_allowed_referrers.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "serve": "astro build && astro preview --host",
@@ -44,13 +42,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/esphome/esphome.io.git"
+    "url": "git+https://github.com/EmbedMe-io/embedme-docs.git"
   },
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://github.com/esphome/esphome.io/issues"
+    "url": "https://github.com/EmbedMe-io/embedme-docs/issues"
   },
-  "homepage": "https://esphome.io",
+  "homepage": "https://docs.embedme.io",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.7.0",

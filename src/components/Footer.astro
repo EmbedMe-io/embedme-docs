@@ -18,11 +18,13 @@ const isBlogPost = /^blog\/(?!(\d+\/?|tags\/.+|authors\/.+)$).+$/.test(id);
 // for them (this also avoids Discourse auto-creating a topic for the URL).
 const isCrosspost = Boolean(entry.data.crosspostSource);
 
-// Only load the Discourse comments embed on the production deploy. Netlify sets
-// CONTEXT to "production" only for the main production build; branch deploys
-// (e.g. beta/next) and deploy previews get "branch-deploy"/"deploy-preview", so
-// comments (including the heading) are hidden there.
-const isProduction = process.env.CONTEXT === "production";
+// Discourse embeds auto-create a forum topic keyed to the page's exact canonical
+// URL the first time it's loaded. Upstream's existing threads live under
+// esphome.io URLs on community.home-assistant.io -- a forum EmbedMe doesn't run
+// or administer. Enabling this on docs.embedme.io would silently spam that
+// forum with disconnected duplicate topics per mirrored blog post, so this stays
+// permanently disabled here rather than gated on a deploy-platform env var.
+const isProduction = false;
 
 const footerLinks = [
   {
@@ -37,8 +39,8 @@ const footerLinks = [
   {
     name: "Community",
     children: [
-      { name: "Discord", url: "https://esphome.io/chat" },
-      { name: "GitHub", url: "https://github.com/esphome/esphome" },
+      { name: "Discord", url: "https://discord.gg/BCHEtD4A" },
+      { name: "GitHub", url: "https://github.com/EmbedMe-io/embedme" },
       { name: "Forum", url: "https://community.home-assistant.io/c/esphome/" },
     ],
   },
@@ -87,7 +89,7 @@ const footerLinks = [
 
     <div class="footer-bottom">
       <a href="https://www.openhomefoundation.org/" target="_blank" rel="noopener noreferrer" class="ohf-link">
-        <span>ESPHome is a project from the</span>
+        <span>EmbedMe builds on ESPHome, a project from the</span>
         <img
           class="ohf-dark"
           src="/images/OHF-lockup-main-color-on-dark.svg"
@@ -103,16 +105,6 @@ const footerLinks = [
           height="44"
         />
       </a>
-
-      <p class="analytics-note">
-        This website uses <a
-          href="https://www.openhomefoundation.org/blog/making-our-web-analytics-open-source-with-plausible/"
-          rel="noopener">privacy-first analytics</a
-        > to help us improve the site. You can view all data in our <a
-          href="https://plausible.openhomefoundation.org/esphome.io"
-          rel="noopener">public dashboard</a
-        >.
-      </p>
     </div>
   </div>
 </footer>
@@ -184,23 +176,6 @@ const footerLinks = [
     text-align: center;
     padding: 1rem 0 0;
     border-top: 1px solid var(--sl-color-gray-6);
-  }
-
-  .analytics-note {
-    max-width: 30rem;
-    margin: 2rem auto 0;
-    text-wrap: balance;
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-gray-3);
-  }
-
-  .analytics-note a {
-    color: inherit;
-    text-decoration: underline;
-  }
-
-  .analytics-note a:hover {
-    color: var(--sl-color-white);
   }
 
   .ohf-link {
