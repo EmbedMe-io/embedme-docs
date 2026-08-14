@@ -182,6 +182,10 @@ function checkEndNewline(fname, content) {
   }
 }
 
+// Not called below: this fork's own domain isn't esphome.io, so absolute
+// links to esphome.io are correctly external here, not a lint violation.
+// Kept (rather than deleted) so future upstream edits to it merge cleanly.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function checkEsphomeLinks(fname, content) {
   if (!fname.endsWith(".md") && !fname.endsWith(".mdx")) return;
 
@@ -614,7 +618,7 @@ async function main() {
       checkTabs(fname, content);
       checkNewlines(fname, content);
       checkEndNewline(fname, content);
-      checkEsphomeLinks(fname, content);
+      // checkEsphomeLinks intentionally not run -- see its definition above.
       checkAutomationHeadings(fname, content);
       await checkInternalLinks(fname, content, anchorCache);
     } catch (error) {
