@@ -1,11 +1,11 @@
 {
-  "name": "ESPHome",
-  "short_name": "ESPHome",
-  "description": "Smart Home Made Simple. ESPHome turns ESP32, ESP8266, and RP2040 microcontrollers into fully-featured smart home devices.",
+  "name": "EmbedMe",
+  "short_name": "EmbedMe",
+  "description": "Smart Home Made Simple. EmbedMe turns ESP32, ESP8266, and RP2040 microcontrollers into fully-featured smart home devices.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#18bcf2",
+  "theme_color": "#f0e036",
   "icons": [
     { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/favicon-512x512.png", "sizes": "512x512", "type": "image/png" }
