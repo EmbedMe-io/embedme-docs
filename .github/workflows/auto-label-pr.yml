@@ -23,10 +23,12 @@ env:
 jobs:
   label:
     runs-on: ubuntu-latest
-    if: github.event.action != 'labeled' || github.event.sender.type != 'Bot'
+    # Needs the esphome org's own GitHub App (ESPHOME_GITHUB_APP_CLIENT_ID/
+    # _PRIVATE_KEY), which this fork doesn't have -- skip on forks.
+    if: github.repository == 'esphome/esphome.io' && (github.event.action != 'labeled' || github.event.sender.type != 'Bot')
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Generate a token
         id: generate-token

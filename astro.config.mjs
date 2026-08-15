@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import starlight from "@astrojs/starlight";
 import starlightBlog from "starlight-blog";
 import sitemap from "@astrojs/sitemap";
@@ -119,7 +120,7 @@ function getComponentItems() {
 }
 
 export default defineConfig({
-  site: "https://esphome.io",
+  site: "https://docs.embedme.io",
   vite: {
     resolve: {
       alias: {
@@ -131,18 +132,24 @@ export default defineConfig({
   image: {
     breakpoints: imageBreakpoints,
     responsiveStyles: true,
+    // starlight-blog generates social-card opengraph screenshots via the Open
+    // Home Foundation's screenshot proxy -- unrelated to the (removed)
+    // livestream feature, still required for blog post/author pages to build.
     domains: ["assets.openhomefoundation.org"],
   },
   markdown: {
-    // Astro 6 no longer defaults `markdown.gfm` to true, and @astrojs/mdx only applies remark-gfm
-    // to .mdx files when this is explicitly truthy. Without it, GFM tables render as literal text.
-    gfm: true,
-    remarkPlugins: [remarkAlert, remarkMath],
-    rehypePlugins: [rehypeHeadingSlugs, rehypeKatex, rehypeExternalLinksBlog],
+    // Astro 7 defaults `markdown.processor` to Sätteri, which does not run remark/rehype plugins.
+    // The alert, math and heading-slug plugins below are unified plugins, so opt back into the
+    // unified processor. @astrojs/mdx inherits these settings for .mdx files.
+    processor: unified({
+      gfm: true,
+      remarkPlugins: [remarkAlert, remarkMath],
+      rehypePlugins: [rehypeHeadingSlugs, rehypeKatex, rehypeExternalLinksBlog],
+    }),
   },
   integrations: [
     starlight({
-      title: "ESPHome - Smart Home Made Simple",
+      title: "EmbedMe - Smart Home Made Simple",
       titleDelimiter: "-",
       favicon: "/favicon.ico",
       pagination: false,
@@ -161,39 +168,33 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/esphome/esphome",
+          href: "https://github.com/EmbedMe-io/embedme",
         },
         {
           icon: "discord",
           label: "Discord",
-          href: "https://discord.gg/KhAMKrd",
+          href: "https://discord.gg/BCHEtD4A",
         },
       ],
       editLink: {
-        baseUrl: `https://github.com/esphome/esphome.io/edit/${
-          ["next", "beta"].includes(process.env.BRANCH) ? "next" : "current"
-        }/`,
+        baseUrl: "https://github.com/EmbedMe-io/embedme-docs/edit/main/",
       },
       routeMiddleware: ["./src/routeData.ts"],
       components: {
         Footer: "./src/components/Footer.astro",
         Head: "./src/components/Head.astro",
+        Header: "./src/components/Header.astro",
+        PageTitle: "./src/components/PageTitle.astro",
         SiteTitle: "./src/components/SiteTitle.astro",
-        SocialIcons: "./src/components/SocialIcons.astro",
       },
       customCss: ["./src/styles/custom.css", "katex/dist/katex.min.css"],
       sidebar: [
         {
           label: "Getting Started",
           items: [
-            {
-              label: "From Home Assistant",
-              link: "/guides/getting_started_hassio/",
-            },
-            {
-              label: "Using Command Line",
-              link: "/guides/getting_started_command_line/",
-            },
+            { label: "Install EmbedMe", link: "/install/" },
+            { label: "Getting Started", link: "/install/getting-started/" },
+            { label: "Running in Docker", link: "/install/docker/" },
             { label: "Ready-Made Projects", link: "/projects/" },
             {
               label: "Migrate from Tasmota",
@@ -228,7 +229,7 @@ export default defineConfig({
           items: [
             { label: "Blog", link: "/blog/" },
             { label: "Changelog", link: "/changelog/" },
-            { label: "Discord", link: "https://discord.gg/KhAMKrd" },
+            { label: "Discord", link: "https://discord.gg/BCHEtD4A" },
             {
               label: "Forums",
               link: "https://community.home-assistant.io/c/esphome/",
@@ -383,14 +384,14 @@ export default defineConfig({
           tag: "meta",
           attrs: {
             property: "og:image",
-            content: "https://esphome.io/images/og.webp",
+            content: "https://docs.embedme.io/images/og.webp",
           },
         },
         {
           tag: "meta",
           attrs: {
             name: "twitter:image",
-            content: "https://esphome.io/images/og.webp",
+            content: "https://docs.embedme.io/images/og.webp",
           },
         },
         {

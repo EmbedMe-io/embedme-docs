@@ -1,0 +1,64 @@
+name: Deploy to Cloudflare Pages
+
+# Builds the Astro site and deploys dist/ to Cloudflare Pages on every push to
+# main. Runs as a GitHub Actions deploy (not Cloudflare Pages' native Git
+# integration), so this workflow owns the whole build+deploy pipeline.
+#
+# One-time manual setup this workflow depends on:
+#   - Add repo secrets:
+#       CLOUDFLARE_API_TOKEN  -- a token scoped to Cloudflare Pages edit
+#       CLOUDFLARE_ACCOUNT_ID -- the EmbedMe-io Cloudflare account ID
+#   - The Pages project itself ("embedme-docs") is created automatically
+#     below (idempotent -- a no-op once it exists) as a Direct Upload
+#     project. Do NOT also connect it to this repo via Cloudflare's own Git
+#     integration, or every push would trigger two competing builds.
+#   - Once a deploy has been verified working on the project's *.pages.dev
+#     URL, add docs.embedme.io as a custom domain on the Pages project
+#     (Cloudflare dashboard). Do this deliberately, as a separate step --
+#     docs.embedme.io is currently live, pointed at the old Firebase-hosted
+#     site, so don't cut the DNS over until the new build is confirmed good.
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Idempotent: creates the Pages project on the first run only. Errors
+          # here (including "already exists" on every later run) are swallowed
+          # -- if project creation is broken for a real reason (bad token, no
+          # permission), the deploy command below fails loudly with a clear
+          # "project does not exist" error anyway.
+          preCommands: |
+            npx wrangler pages project create embedme-docs --production-branch=main || true
+          command: pages deploy dist --project-name=embedme-docs --branch=main

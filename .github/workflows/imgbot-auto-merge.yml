@@ -11,7 +11,9 @@ permissions:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'imgbot[bot]'
+    # Needs the esphome org's own GitHub App (ESPHOME_GITHUB_APP_CLIENT_ID/
+    # _PRIVATE_KEY), which this fork doesn't have -- skip on forks.
+    if: github.repository == 'esphome/esphome.io' && github.event.pull_request.user.login == 'imgbot[bot]'
     steps:
       - name: Generate a token
         id: generate-token
