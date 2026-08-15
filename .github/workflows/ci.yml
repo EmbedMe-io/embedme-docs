@@ -6,6 +6,9 @@ on:
 
 permissions:
   contents: read
+  # Needed by the "Upload build output" step below, so preview-deploy.yml can
+  # download the dist/ it built here without ever needing its own secrets.
+  actions: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -30,6 +33,13 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Upload build output
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
   lint:
     name: Lint
     runs-on: ubuntu-latest
