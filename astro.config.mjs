@@ -168,7 +168,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/EmbedMe-io/embedme",
+          href: "https://github.com/embedme-io/embedme",
         },
         {
           icon: "discord",
@@ -177,7 +177,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: "https://github.com/EmbedMe-io/embedme-docs/edit/main/",
+        baseUrl: "https://github.com/embedme-io/embedme-docs/edit/main/",
       },
       routeMiddleware: ["./src/routeData.ts"],
       components: {

@@ -42,11 +42,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EmbedMe-io/embedme-docs.git"
+    "url": "git+https://github.com/embedme-io/embedme-docs.git"
   },
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://github.com/EmbedMe-io/embedme-docs/issues"
+    "url": "https://github.com/embedme-io/embedme-docs/issues"
   },
   "homepage": "https://docs.embedme.io",
   "devDependencies": {

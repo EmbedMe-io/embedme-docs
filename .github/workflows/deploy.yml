@@ -7,7 +7,7 @@ name: Deploy to Cloudflare Pages
 # One-time manual setup this workflow depends on:
 #   - Add repo secrets:
 #       CLOUDFLARE_API_TOKEN  -- a token scoped to Cloudflare Pages edit
-#       CLOUDFLARE_ACCOUNT_ID -- the EmbedMe-io Cloudflare account ID
+#       CLOUDFLARE_ACCOUNT_ID -- the embedme-io Cloudflare account ID
 #   - The Pages project itself ("embedme-docs") is created automatically
 #     below (idempotent -- a no-op once it exists) as a Direct Upload
 #     project. Do NOT also connect it to this repo via Cloudflare's own Git
