@@ -5,12 +5,13 @@ name: Deploy to Cloudflare Pages
 # integration), so this workflow owns the whole build+deploy pipeline.
 #
 # One-time manual setup this workflow depends on:
-#   - Create a Cloudflare Pages project (e.g. "embedme-docs") as a Direct
-#     Upload project -- do NOT also connect it to this repo via Cloudflare's
-#     own Git integration, or every push would trigger two competing builds.
 #   - Add repo secrets:
 #       CLOUDFLARE_API_TOKEN  -- a token scoped to Cloudflare Pages edit
 #       CLOUDFLARE_ACCOUNT_ID -- the EmbedMe-io Cloudflare account ID
+#   - The Pages project itself ("embedme-docs") is created automatically
+#     below (idempotent -- a no-op once it exists) as a Direct Upload
+#     project. Do NOT also connect it to this repo via Cloudflare's own Git
+#     integration, or every push would trigger two competing builds.
 #   - Once a deploy has been verified working on the project's *.pages.dev
 #     URL, add docs.embedme.io as a custom domain on the Pages project
 #     (Cloudflare dashboard). Do this deliberately, as a separate step --
@@ -53,4 +54,11 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Idempotent: creates the Pages project on the first run only. Errors
+          # here (including "already exists" on every later run) are swallowed
+          # -- if project creation is broken for a real reason (bad token, no
+          # permission), the deploy command below fails loudly with a clear
+          # "project does not exist" error anyway.
+          preCommands: |
+            npx wrangler pages project create embedme-docs --production-branch=main || true
           command: pages deploy dist --project-name=embedme-docs --branch=main
