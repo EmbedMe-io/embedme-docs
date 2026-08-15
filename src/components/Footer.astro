@@ -11,7 +11,7 @@ const isBlogPage = Astro.url.pathname.startsWith("/blog");
 // isAnyBlogPostPage. Injected here rather than via a MarkdownContent override so
 // starlight-blog keeps ownership of MarkdownContent (importing its components
 // directly trips a rolldown exports-field error on starlight-blog/libs/page).
-const { id } = Astro.locals.starlightRoute;
+const { id, entry } = Astro.locals.starlightRoute;
 const isBlogPost = /^blog\/(?!(\d+\/?|tags\/.+|authors\/.+)$).+$/.test(id);
 
 // Discourse embeds auto-create a forum topic keyed to the page's exact canonical
@@ -20,6 +20,11 @@ const isBlogPost = /^blog\/(?!(\d+\/?|tags\/.+|authors\/.+)$).+$/.test(id);
 // or administer. Enabling this on docs.embedme.io would silently spam that
 // forum with disconnected duplicate topics per mirrored blog post, so this stays
 // permanently disabled here rather than gated on a deploy-platform env var.
+
+// Crossposts redirect off-site immediately, so never embed Discourse comments
+// for them (this also avoids Discourse auto-creating a topic for the URL).
+const isCrosspost = Boolean(entry.data.crosspostSource);
+
 const isProduction = false;
 
 const footerLinks = [
@@ -52,7 +57,7 @@ const footerLinks = [
 ---
 
 {isBlogPage && <CrosspostBadges />}
-{isBlogPost && isProduction && <DiscourseComments />}
+{isBlogPost && isProduction && !isCrosspost && <DiscourseComments />}
 
 <footer class="sl-flex">
   <div class="meta sl-flex">
