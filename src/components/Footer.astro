@@ -14,11 +14,13 @@ const isBlogPage = Astro.url.pathname.startsWith("/blog");
 const { id } = Astro.locals.starlightRoute;
 const isBlogPost = /^blog\/(?!(\d+\/?|tags\/.+|authors\/.+)$).+$/.test(id);
 
-// Only load the Discourse comments embed on the production deploy. Netlify sets
-// CONTEXT to "production" only for the main production build; branch deploys
-// (e.g. beta/next) and deploy previews get "branch-deploy"/"deploy-preview", so
-// comments (including the heading) are hidden there.
-const isProduction = process.env.CONTEXT === "production";
+// Discourse embeds auto-create a forum topic keyed to the page's exact canonical
+// URL the first time it's loaded. Upstream's existing threads live under
+// esphome.io URLs on community.home-assistant.io -- a forum EmbedMe doesn't run
+// or administer. Enabling this on docs.embedme.io would silently spam that
+// forum with disconnected duplicate topics per mirrored blog post, so this stays
+// permanently disabled here rather than gated on a deploy-platform env var.
+const isProduction = false;
 
 const footerLinks = [
   {
