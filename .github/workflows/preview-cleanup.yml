@@ -1,0 +1,72 @@
+name: Clean Up PR Preview
+
+# Deletes a PR's Cloudflare Pages preview deployment(s) once the PR closes.
+#
+# Uses pull_request_target (not pull_request) so this runs -- with secrets
+# available -- for PRs from forks too, not just same-repo branches. This is
+# safe here, unlike a pull_request_target build job would be: this workflow
+# never checks out or executes the PR's own code, only calls the GitHub
+# event payload (a trusted PR number assigned by GitHub, not attacker
+# text) and the Cloudflare API. Same reasoning already used in this repo by
+# close-pr-from-fork-default-branch.yml.
+#
+# A third-party action (cleanup-cloudflare-deployments) was considered, but
+# it decides what's "stale" purely by checking whether a deployment's branch
+# name still exists via GitHub's listBranches on this repo. That doesn't fit
+# here: our previews are aliased to pr-<number>, not a real git branch, and a
+# fork PR's branch only ever exists in the fork, never in this repo's branch
+# list -- so that action would delete every preview (fork or not) on its
+# first scheduled run, regardless of whether the PR was still open. Deleting
+# by PR-closed event instead keys cleanup to the thing that actually matters.
+
+on:
+  pull_request_target:
+    types: [closed]
+
+concurrency:
+  group: preview-cleanup-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Cloudflare Pages preview deployments
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: embedme-docs
+          BRANCH: pr-${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          api="https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT/deployments"
+          auth=(-H "Authorization: Bearer $CLOUDFLARE_API_TOKEN")
+
+          page=1
+          total_pages=1
+          ids=()
+          while [ "$page" -le "$total_pages" ]; do
+            resp=$(curl -sf "${auth[@]}" "$api?page=$page&per_page=25")
+            total_pages=$(echo "$resp" | jq -r '.result_info.total_pages')
+            while IFS= read -r id; do
+              [ -n "$id" ] && ids+=("$id")
+            done < <(echo "$resp" | jq -r --arg branch "$BRANCH" \
+              '.result[] | select(.deployment_trigger.metadata.branch == $branch) | .id')
+            page=$((page + 1))
+          done
+
+          if [ "${#ids[@]}" -eq 0 ]; then
+            echo "No preview deployments found for branch $BRANCH"
+            exit 0
+          fi
+
+          for id in "${ids[@]}"; do
+            echo "Deleting deployment $id (branch $BRANCH)"
+            # force=true: our preview deployment is the current alias target
+            # for its branch, which a plain delete would otherwise reject.
+            curl -sf -X DELETE "${auth[@]}" "$api/$id?force=true"
+          done
