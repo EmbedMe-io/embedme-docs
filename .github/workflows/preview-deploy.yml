@@ -53,16 +53,23 @@ jobs:
         with:
           script: |
             // workflow_run's own `pull_requests` array is empty for PRs from
-            // forks (a documented GitHub limitation) -- look the PR up by
-            // head commit instead, which works for same-repo and fork PRs.
-            const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+            // forks (a documented GitHub limitation). Don't use
+            // listPullRequestsAssociatedWithCommit as a substitute either --
+            // this repo is itself a fork of esphome/esphome.io, so a
+            // contributor's branch that also has a PR open against the
+            // upstream repo can resolve to *that* PR instead of the one open
+            // here, or resolve to nothing at all. Filter pulls.list by the
+            // exact head owner:branch from the workflow_run payload instead,
+            // which is unambiguous and repo-scoped.
+            const { data } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: context.payload.workflow_run.head_sha,
+              state: "open",
+              head: `${context.payload.workflow_run.head_repository.owner.login}:${context.payload.workflow_run.head_branch}`,
             });
-            const pr = data.find((p) => p.state === "open");
+            const pr = data[0];
             if (!pr) {
-              core.setFailed("No open pull request found for this workflow run's head commit.");
+              core.setFailed("No open pull request found for this workflow run's head branch.");
               return;
             }
             core.setOutput("number", pr.number);
